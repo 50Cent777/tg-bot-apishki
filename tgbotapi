@@ -1,0 +1,28 @@
+import telebot
+import openai
+
+TOKEN = '6135664268:AAHO31GJaDsySoUpfttMR0bOEvwBtVWBzBA'
+
+Bot = telebot.TeleBot(TOKEN)
+
+
+openai.api_key = "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"
+
+@Bot.message_handler(func=lambda _: True)
+def start_function(message):
+
+    response = openai.Completion.create(
+  model="text-davinci-003",
+  prompt=message.text,
+  temperature=0.5,
+  max_tokens=1000,
+  top_p=1.0,
+  frequency_penalty=0.5,
+  presence_penalty=0.0,
+  stop=["Ed:"]
+)
+
+    Bot.send_message(text=response['choices'][0]['text'], chat_id=message.from_user.id)
+
+if __name__ =='__main__':
+    Bot.polling()
